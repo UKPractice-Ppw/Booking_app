@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Tbl_author">
+    <Key>
+      <PropertyRef Name="author_id" />
+    </Key>
+    <Property Name="author_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="author_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="author_email" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="booktype_id" Type="Int32" />
+    <Property Name="phone" Type="Int64" />
+    <NavigationProperty Name="Tbl_bookType" Relationship="Self.FK_Tbl_author_Tbl_bookType" FromRole="Tbl_author" ToRole="Tbl_bookType" />
+    <NavigationProperty Name="Tbl_book" Relationship="Self.FK_Tbl_book_Tbl_author" FromRole="Tbl_author" ToRole="Tbl_book" />
+    <Property Name="password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Tbl_book">
+    <Key>
+      <PropertyRef Name="book_id" />
+    </Key>
+    <Property Name="book_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="book_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="booktype_id" Type="Int32" />
+    <Property Name="author_id" Type="Int32" />
+    <Property Name="pub_id" Type="Int32" />
+    <Property Name="book_pub_date" Type="DateTime" Precision="0" />
+    <Property Name="ISBN_No" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Price" Type="Int32" />
+    <NavigationProperty Name="Tbl_author" Relationship="Self.FK_Tbl_book_Tbl_author" FromRole="Tbl_book" ToRole="Tbl_author" />
+    <NavigationProperty Name="Tbl_bookType" Relationship="Self.FK_Tbl_book_Tbl_bookType" FromRole="Tbl_book" ToRole="Tbl_bookType" />
+    <NavigationProperty Name="Tbl_publisher" Relationship="Self.FK_Tbl_book_Tbl_publisher" FromRole="Tbl_book" ToRole="Tbl_publisher" />
+  </EntityType>
+  <EntityType Name="Tbl_bookType">
+    <Key>
+      <PropertyRef Name="booktype_id" />
+    </Key>
+    <Property Name="booktype_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="booktype_name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tbl_author" Relationship="Self.FK_Tbl_author_Tbl_bookType" FromRole="Tbl_bookType" ToRole="Tbl_author" />
+    <NavigationProperty Name="Tbl_book" Relationship="Self.FK_Tbl_book_Tbl_bookType" FromRole="Tbl_bookType" ToRole="Tbl_book" />
+  </EntityType>
+  <EntityType Name="Tbl_publisher">
+    <Key>
+      <PropertyRef Name="pub_id" />
+    </Key>
+    <Property Name="pub_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="pub_name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Tbl_book" Relationship="Self.FK_Tbl_book_Tbl_publisher" FromRole="Tbl_publisher" ToRole="Tbl_book" />
+  </EntityType>
+  <Association Name="FK_Tbl_author_Tbl_bookType">
+    <End Role="Tbl_bookType" Type="Self.Tbl_bookType" Multiplicity="0..1" />
+    <End Role="Tbl_author" Type="Self.Tbl_author" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_bookType">
+        <PropertyRef Name="booktype_id" />
+      </Principal>
+      <Dependent Role="Tbl_author">
+        <PropertyRef Name="booktype_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_author">
+    <End Role="Tbl_author" Type="Self.Tbl_author" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_author">
+        <PropertyRef Name="author_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="author_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_bookType">
+    <End Role="Tbl_bookType" Type="Self.Tbl_bookType" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_bookType">
+        <PropertyRef Name="booktype_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="booktype_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_publisher">
+    <End Role="Tbl_publisher" Type="Self.Tbl_publisher" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_publisher">
+        <PropertyRef Name="pub_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="pub_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Tbl_author" EntityType="Self.Tbl_author" />
+    <EntitySet Name="Tbl_book" EntityType="Self.Tbl_book" />
+    <EntitySet Name="Tbl_bookType" EntityType="Self.Tbl_bookType" />
+    <EntitySet Name="Tbl_publisher" EntityType="Self.Tbl_publisher" />
+    <AssociationSet Name="FK_Tbl_author_Tbl_bookType" Association="Self.FK_Tbl_author_Tbl_bookType">
+      <End Role="Tbl_bookType" EntitySet="Tbl_bookType" />
+      <End Role="Tbl_author" EntitySet="Tbl_author" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_author" Association="Self.FK_Tbl_book_Tbl_author">
+      <End Role="Tbl_author" EntitySet="Tbl_author" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_bookType" Association="Self.FK_Tbl_book_Tbl_bookType">
+      <End Role="Tbl_bookType" EntitySet="Tbl_bookType" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_publisher" Association="Self.FK_Tbl_book_Tbl_publisher">
+      <End Role="Tbl_publisher" EntitySet="Tbl_publisher" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

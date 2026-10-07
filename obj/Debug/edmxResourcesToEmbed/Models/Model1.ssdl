@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Tbl_author">
+    <Key>
+      <PropertyRef Name="author_id" />
+    </Key>
+    <Property Name="author_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="author_name" Type="nvarchar(max)" />
+    <Property Name="author_email" Type="nvarchar(max)" />
+    <Property Name="booktype_id" Type="int" />
+    <Property Name="phone" Type="bigint" />
+    <Property Name="password" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Tbl_book">
+    <Key>
+      <PropertyRef Name="book_id" />
+    </Key>
+    <Property Name="book_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="book_name" Type="nvarchar(max)" />
+    <Property Name="booktype_id" Type="int" />
+    <Property Name="author_id" Type="int" />
+    <Property Name="pub_id" Type="int" />
+    <Property Name="book_pub_date" Type="date" />
+    <Property Name="ISBN_No" Type="nvarchar(max)" />
+    <Property Name="Price" Type="int" />
+  </EntityType>
+  <EntityType Name="Tbl_bookType">
+    <Key>
+      <PropertyRef Name="booktype_id" />
+    </Key>
+    <Property Name="booktype_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="booktype_name" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Tbl_publisher">
+    <Key>
+      <PropertyRef Name="pub_id" />
+    </Key>
+    <Property Name="pub_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="pub_name" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <Association Name="FK_Tbl_author_Tbl_bookType">
+    <End Role="Tbl_bookType" Type="Self.Tbl_bookType" Multiplicity="0..1" />
+    <End Role="Tbl_author" Type="Self.Tbl_author" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_bookType">
+        <PropertyRef Name="booktype_id" />
+      </Principal>
+      <Dependent Role="Tbl_author">
+        <PropertyRef Name="booktype_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_author">
+    <End Role="Tbl_author" Type="Self.Tbl_author" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_author">
+        <PropertyRef Name="author_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="author_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_bookType">
+    <End Role="Tbl_bookType" Type="Self.Tbl_bookType" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_bookType">
+        <PropertyRef Name="booktype_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="booktype_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tbl_book_Tbl_publisher">
+    <End Role="Tbl_publisher" Type="Self.Tbl_publisher" Multiplicity="0..1" />
+    <End Role="Tbl_book" Type="Self.Tbl_book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tbl_publisher">
+        <PropertyRef Name="pub_id" />
+      </Principal>
+      <Dependent Role="Tbl_book">
+        <PropertyRef Name="pub_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Tbl_author" EntityType="Self.Tbl_author" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_book" EntityType="Self.Tbl_book" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_bookType" EntityType="Self.Tbl_bookType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tbl_publisher" EntityType="Self.Tbl_publisher" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Tbl_author_Tbl_bookType" Association="Self.FK_Tbl_author_Tbl_bookType">
+      <End Role="Tbl_bookType" EntitySet="Tbl_bookType" />
+      <End Role="Tbl_author" EntitySet="Tbl_author" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_author" Association="Self.FK_Tbl_book_Tbl_author">
+      <End Role="Tbl_author" EntitySet="Tbl_author" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_bookType" Association="Self.FK_Tbl_book_Tbl_bookType">
+      <End Role="Tbl_bookType" EntitySet="Tbl_bookType" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tbl_book_Tbl_publisher" Association="Self.FK_Tbl_book_Tbl_publisher">
+      <End Role="Tbl_publisher" EntitySet="Tbl_publisher" />
+      <End Role="Tbl_book" EntitySet="Tbl_book" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

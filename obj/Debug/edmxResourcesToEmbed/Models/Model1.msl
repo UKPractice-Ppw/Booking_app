@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="Entities">
+    <EntitySetMapping Name="Tbl_author">
+      <EntityTypeMapping TypeName="Model.Tbl_author">
+        <MappingFragment StoreEntitySet="Tbl_author">
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="author_id" ColumnName="author_id" />
+          <ScalarProperty Name="author_name" ColumnName="author_name" />
+          <ScalarProperty Name="author_email" ColumnName="author_email" />
+          <ScalarProperty Name="booktype_id" ColumnName="booktype_id" />
+          <ScalarProperty Name="phone" ColumnName="phone" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_book">
+      <EntityTypeMapping TypeName="Model.Tbl_book">
+        <MappingFragment StoreEntitySet="Tbl_book">
+          <ScalarProperty Name="book_id" ColumnName="book_id" />
+          <ScalarProperty Name="book_name" ColumnName="book_name" />
+          <ScalarProperty Name="booktype_id" ColumnName="booktype_id" />
+          <ScalarProperty Name="author_id" ColumnName="author_id" />
+          <ScalarProperty Name="pub_id" ColumnName="pub_id" />
+          <ScalarProperty Name="book_pub_date" ColumnName="book_pub_date" />
+          <ScalarProperty Name="ISBN_No" ColumnName="ISBN_No" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_bookType">
+      <EntityTypeMapping TypeName="Model.Tbl_bookType">
+        <MappingFragment StoreEntitySet="Tbl_bookType">
+          <ScalarProperty Name="booktype_id" ColumnName="booktype_id" />
+          <ScalarProperty Name="booktype_name" ColumnName="booktype_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tbl_publisher">
+      <EntityTypeMapping TypeName="Model.Tbl_publisher">
+        <MappingFragment StoreEntitySet="Tbl_publisher">
+          <ScalarProperty Name="pub_id" ColumnName="pub_id" />
+          <ScalarProperty Name="pub_name" ColumnName="pub_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
