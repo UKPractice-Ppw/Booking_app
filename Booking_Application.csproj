@@ -259,6 +259,7 @@
     <Content Include="Views\Author\Details.cshtml" />
     <Content Include="Views\Author\Edit.cshtml" />
     <Content Include="Views\Author\Index.cshtml" />
+    <Content Include="Views\Author\Login.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

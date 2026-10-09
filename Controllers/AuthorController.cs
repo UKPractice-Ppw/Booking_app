@@ -13,6 +13,7 @@ namespace Booking_Application.Controllers
     public class AuthorController : Controller
     {
         private Entities db = new Entities();
+        private DbHandler hnd = new DbHandler();
 
         // GET: Author
         public ActionResult Index()
@@ -59,6 +60,29 @@ namespace Booking_Application.Controllers
 
             ViewBag.booktype_id = new SelectList(db.Tbl_bookType, "booktype_id", "booktype_name", tbl_author.booktype_id);
             return View(tbl_author);
+        }
+
+        // GET: Author/Login
+        [HttpGet]
+        public ActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult Login(Tbl_author auth)
+        {
+            if(ModelState.IsValid)
+            {
+                if(hnd.Login_author(auth)!=0)
+                {
+                    return RedirectToAction("Index","Book");
+                }
+                else
+                {
+                    return View(auth);
+                }
+            }
+            return View(auth);
         }
 
         // GET: Author/Edit/5

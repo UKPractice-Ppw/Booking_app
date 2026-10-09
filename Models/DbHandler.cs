@@ -19,8 +19,21 @@ namespace Booking_Application.Models
         public int Login_author(Tbl_author auth)        
         {
             Connection();
-            string qry = "SELECT * FROM Tbl_author WHERE author_name=@author_name AND ";
-            return 0;
+            string qry = "SELECT * FROM Tbl_author WHERE author_name=@author_name AND password=@pass";
+            SqlCommand cmd = new SqlCommand(qry, con);
+            cmd.Parameters.AddWithValue("@author_name",auth.author_name);
+            cmd.Parameters.AddWithValue("@pass",auth.password);
+            SqlDataReader sdr = cmd.ExecuteReader();
+            if(sdr.HasRows)
+            {
+                sdr.Read();
+                int id = (int)sdr["author_id"];
+                return id;
+            }
+            else
+            {
+                return 0;
+            }   
         }
 
     }
