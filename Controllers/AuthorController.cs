@@ -75,6 +75,7 @@ namespace Booking_Application.Controllers
             {
                 if(hnd.Login_author(auth)!=0)
                 {
+                    Session["auth_id"] = (int)hnd.Login_author(auth);
                     return RedirectToAction("Index","Book");
                 }
                 else
@@ -86,13 +87,13 @@ namespace Booking_Application.Controllers
         }
 
         // GET: Author/Edit/5
-        public ActionResult Edit(int? id)
+        public ActionResult Edit()
         {
-            if (id == null)
+            if (Session["auth_id"] == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                return RedirectToAction("Login","Author");
             }
-            Tbl_author tbl_author = db.Tbl_author.Find(id);
+            Tbl_author tbl_author = db.Tbl_author.Find(Session["auth_id"]);
             if (tbl_author == null)
             {
                 return HttpNotFound();
@@ -112,7 +113,7 @@ namespace Booking_Application.Controllers
             {
                 db.Entry(tbl_author).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Book");
             }
             ViewBag.booktype_id = new SelectList(db.Tbl_bookType, "booktype_id", "booktype_name", tbl_author.booktype_id);
             return View(tbl_author);

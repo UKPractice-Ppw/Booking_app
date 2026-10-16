@@ -15,15 +15,40 @@ namespace Booking_Application.Controllers
         private Entities db = new Entities();
 
         // GET: Book
-        public ActionResult Index()
+        public ActionResult Index(int? booktype_id)
         {
-            var tbl_book = db.Tbl_book.Include(t => t.Tbl_author).Include(t => t.Tbl_bookType).Include(t => t.Tbl_publisher);
+            // Check if Author is logged in
+            if (Session["auth_id"] == null)
+            {
+                return RedirectToAction("Login", "Author");
+            }
+
+            int loggedInAuthorId = Convert.ToInt32(Session["auth_id"]);
+
+            // Filter books by logged-in author
+            var tbl_book = db.Tbl_book
+                             .Include(t => t.Tbl_author)
+                             .Include(t => t.Tbl_bookType)
+                             .Include(t => t.Tbl_publisher)
+                             .Where(b => b.author_id == loggedInAuthorId);
+
+            // Filter by selected Book Type (if chosen from search)
+            if (booktype_id.HasValue && booktype_id.Value > 0)
+            {
+                tbl_book = tbl_book.Where(b => b.booktype_id == booktype_id.Value);
+            }
+
+            // Populate Book Type dropdown list for the view
+            ViewBag.booktype_id = new SelectList(db.Tbl_bookType, "booktype_id", "booktype_name", booktype_id);
+
             return View(tbl_book.ToList());
         }
 
         // GET: Book/Details/5
         public ActionResult Details(int? id)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -39,19 +64,24 @@ namespace Booking_Application.Controllers
         // GET: Book/Create
         public ActionResult Create()
         {
-            ViewBag.author_id = new SelectList(db.Tbl_author, "author_id", "author_name");
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
+            ViewBag.author_id = new SelectList(db.Tbl_author, "author_id", "author_name", Session["auth_id"]);
             ViewBag.booktype_id = new SelectList(db.Tbl_bookType, "booktype_id", "booktype_name");
             ViewBag.pub_id = new SelectList(db.Tbl_publisher, "pub_id", "pub_name");
             return View();
         }
 
         // POST: Book/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "book_id,book_name,booktype_id,author_id,pub_id,book_pub_date,ISBN_No,Price")] Tbl_book tbl_book)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
+            // Ensure created book is mapped to logged in author
+            tbl_book.author_id = Convert.ToInt32(Session["auth_id"]);
+
             if (ModelState.IsValid)
             {
                 db.Tbl_book.Add(tbl_book);
@@ -68,6 +98,8 @@ namespace Booking_Application.Controllers
         // GET: Book/Edit/5
         public ActionResult Edit(int? id)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -84,12 +116,12 @@ namespace Booking_Application.Controllers
         }
 
         // POST: Book/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "book_id,book_name,booktype_id,author_id,pub_id,book_pub_date,ISBN_No,Price")] Tbl_book tbl_book)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
             if (ModelState.IsValid)
             {
                 db.Entry(tbl_book).State = EntityState.Modified;
@@ -105,6 +137,8 @@ namespace Booking_Application.Controllers
         // GET: Book/Delete/5
         public ActionResult Delete(int? id)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -122,6 +156,8 @@ namespace Booking_Application.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            if (Session["auth_id"] == null) return RedirectToAction("Login", "Author");
+
             Tbl_book tbl_book = db.Tbl_book.Find(id);
             db.Tbl_book.Remove(tbl_book);
             db.SaveChanges();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity.Core.EntityClient;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -13,8 +14,10 @@ namespace Booking_Application.Models
         SqlConnection con;
         public void Connection()
         {
-            string conn = ConfigurationManager.ConnectionStrings["Entities"].ConnectionString;
-            con = new SqlConnection(conn);
+            string efConnectionString = ConfigurationManager.ConnectionStrings["Entities"].ConnectionString;
+            EntityConnectionStringBuilder builder = new EntityConnectionStringBuilder(efConnectionString);
+            string sqlConnectionString = builder.ProviderConnectionString;
+            con = new SqlConnection(sqlConnectionString);
         }
         public int Login_author(Tbl_author auth)        
         {
@@ -23,6 +26,7 @@ namespace Booking_Application.Models
             SqlCommand cmd = new SqlCommand(qry, con);
             cmd.Parameters.AddWithValue("@author_name",auth.author_name);
             cmd.Parameters.AddWithValue("@pass",auth.password);
+            con.Open();
             SqlDataReader sdr = cmd.ExecuteReader();
             if(sdr.HasRows)
             {

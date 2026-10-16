@@ -1,14 +1,26 @@
 ﻿@model IEnumerable<Booking_Application.Models.Tbl_book>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "My Books";
 }
 
-<h2>Index</h2>
+<h2>My Books</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+<!-- Book Type Search Form -->
+@using (Html.BeginForm("Index", "Book", FormMethod.Get, new { @class = "form-inline", @style = "margin-bottom: 20px;" }))
+{
+    <div class="form-group">
+        <label for="booktype_id">Search by Book Type: </label>
+        @Html.DropDownList("booktype_id", (SelectList)ViewBag.booktype_id, "-- All Types --", new { @class = "form-control" })
+    </div>
+    <input type="submit" value="Filter" class="btn btn-default" />
+    @Html.ActionLink("Reset", "Index", null, new { @class = "btn btn-default" })
+}
+
 <table class="table">
     <tr>
         <th>
@@ -35,35 +47,36 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.book_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.book_pub_date)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ISBN_No)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tbl_author.author_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tbl_bookType.booktype_name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tbl_publisher.pub_name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.book_id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.book_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.book_id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.book_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.book_pub_date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ISBN_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tbl_author.author_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tbl_bookType.booktype_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tbl_publisher.pub_name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.book_id }) |
+                @Html.ActionLink("Details", "Details", new { id = item.book_id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.book_id })
+            </td>
+        </tr>
+    }
 
 </table>
